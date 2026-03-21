@@ -1,3 +1,5 @@
+using static Logger;
+using static Logger.MessageType;
 using System.Diagnostics;
 
 public static class CommandRunner
@@ -8,28 +10,25 @@ public static class CommandRunner
         {
             FileName = fileName,
             Arguments = arguments,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
+            RedirectStandardOutput = false,
+            RedirectStandardError = false,
             UseShellExecute = false,
-            CreateNoWindow = true
+            CreateNoWindow = false
         };
 
-        using var process = new Process { StartInfo = startInfo };
-        process.OutputDataReceived += (sender, e) => 
+        try
         {
-            if (e.Data != null) Console.WriteLine(e.Data);
-        };
-        process.ErrorDataReceived += (sender, e) => 
+            using var process = Process.Start(startInfo);
+            
+            if (process == null) return -1;
+
+            process.WaitForExit();
+            return process.ExitCode;
+        }
+        catch (Exception ex)
         {
-            if (e.Data != null) Console.WriteLine(e.Data); 
-        };
-
-        if (!process.Start()) return -1;
-        
-        process.BeginOutputReadLine();
-        process.BeginErrorReadLine();
-
-        process.WaitForExit();
-        return process.ExitCode;
+            Log(Err, $"could not start process: {ex.Message}\n");
+            return -1;
+        }
     }
 }

@@ -11,21 +11,22 @@ public class CsBuilder : IBuilder
     {
         Log(Default, $"{Name} project detected\n");
         Stopwatch timer = Stopwatch.StartNew();
-        string targetProject = Path.GetExtension(config.MainFile).ToLower();
+        string targetProject = config.MainFile;
+        string extension = Path.GetExtension(targetProject).ToLower();
 
-        if (targetProject == ".cs")
+        if (extension == ".cs")
              Log(Warn, "single file build. for better performance and dependencies use .csproj file\n");
 
         string outPath = string.IsNullOrWhiteSpace(config.OutputFile) ? "publish" : config.OutputFile;
         string cmd = "dotnet";
-        string args = $"publish {targetProject} {config.CompilerFlags} -o {outPath}";
+        string args = $"publish {targetProject} {config.CompilerFlags} -o {outPath}".Trim();
         Log(Default, $"running \"{cmd} {args}\"\n");
         int result = CommandRunner.Run(cmd, args);
         timer.Stop();
         string elapsed = timer.Elapsed.TotalSeconds.ToString("0.0");
 
         if (result == 0)
-            Log(Success, $"build finished successfully in {elapsed}s. output located in {outPath}\n");
+            Log(Done, $"build finished successfully in {elapsed}s. output located in {outPath}\n");
         else
             Log(Err, $"project build failed. (exit code {result})\n");
     }

@@ -3,7 +3,7 @@ public static class Logger
     public enum MessageType
     {
         Default,
-        Success,
+        Done,
         Info,
         Warn,
         Err
@@ -16,8 +16,8 @@ public static class Logger
             case MessageType.Default:
                 PrintLabel("bob", ConsoleColor.Blue);
                 break;
-            case MessageType.Success:
-                PrintLabel("success", ConsoleColor.Green);
+            case MessageType.Done:
+                PrintLabel("done", ConsoleColor.Green);
                 break;
             case MessageType.Info:
                 PrintLabel("info", ConsoleColor.White);

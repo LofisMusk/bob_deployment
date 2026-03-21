@@ -10,15 +10,15 @@ public class ProjectConfig
 
 public static class BuildAssistant
 {
-    private static readonly List<IBuilder> Builders = new()
-    {
+    private static readonly List<IBuilder> Builders =
+    [
         new CsBuilder(),
         //new GccBuilder();
         new RustBuilder(),
         //new GoBuilder(),
         //new JavaBuilder();
         //new PythonBuilder()
-    };
+    ];
 
     public static void Build()
     {

@@ -11,21 +11,34 @@ public class RustBuilder : IBuilder
     {
         Log(Default, $"{Name} project detected\n");
         Stopwatch timer = Stopwatch.StartNew();
+        string targetProject = config.MainFile;
         string extension = Path.GetExtension(config.MainFile).ToLower();
         string cmd;
         string args;
-        string outPath = string.IsNullOrWhiteSpace(config.OutputFile) ? "target/release" : config.OutputFile;
+        string outPath;
 
         if (extension == ".toml")
         {
             cmd = "cargo";
-            args = $"build {config.CompilerFlags}";
+            string outputFlag = string.IsNullOrWhiteSpace(config.OutputFile) 
+                ? "" 
+                : $"--target-dir {config.OutputFile}";
+            args = $"build {outputFlag} {config.CompilerFlags}".Trim();
+            
+            if (!string.IsNullOrWhiteSpace(config.OutputFile))
+                outPath = config.OutputFile;
+            else
+            {
+                bool isRelease = config.CompilerFlags.Contains("-r") || config.CompilerFlags.Contains("--release");
+                outPath = isRelease ? "target/release" : "target/debug";
+            }
         }
         else
         {
             cmd = "rustc";
             string binaryName = string.IsNullOrWhiteSpace(config.OutputFile) ? "app.out" : config.OutputFile;
-            args = $"{config.MainFile} -o {binaryName} {config.CompilerFlags}";
+            args = $"{targetProject} -o {binaryName} {config.CompilerFlags}";
+            outPath = binaryName;
             Log(Warn, "single file build. for better performance and dependencies use Cargo.toml\n");
         }
 
@@ -35,7 +48,7 @@ public class RustBuilder : IBuilder
         string elapsed = timer.Elapsed.TotalSeconds.ToString("0.0");
 
         if (result == 0)
-            Log(Success, $"build finished successfully in {elapsed}s. output located in {outPath}\n");
+            Log(Done, $"build finished successfully in {elapsed}s. output located in {outPath}\n");
         else
             Log(Err, $"project build failed. (exit code {result})\n");
     }

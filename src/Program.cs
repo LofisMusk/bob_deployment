@@ -46,7 +46,7 @@ public class Program
     private static void DisplayInfo()
     {
         Console.WriteLine("bob (build orchestrator binary) version 0.1");
-        Console.WriteLine("copyright (c) 2026 Michael Zenith"); // et al in the future
-        Console.WriteLine("licensed under GPL license"); // will choose soon
+        Console.WriteLine("copyright (c) 2026 Michael Zenith");
+        Console.WriteLine("licensed under GPL license");
     }
 }
