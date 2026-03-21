@@ -1,6 +1,5 @@
 using static Logger;
 using static Logger.MessageType;
-using System.Diagnostics;
 
 public class CsBuilder : IBuilder
 {
@@ -10,7 +9,12 @@ public class CsBuilder : IBuilder
     public void Build(ProjectConfig config)
     {
         Log(Default, $"{Name} project detected\n");
-        Stopwatch timer = Stopwatch.StartNew();
+        if (CommandRunner.RunQuiet("dotnet", "--version") != 0)
+        {
+            Log(Err, "dotnet is not installed or not in PATH, unable to build\n");
+            return;
+        }
+        Log(Default, "dotnet is present\n");
         string targetProject = config.MainFile;
         string extension = Path.GetExtension(targetProject).ToLower();
 
@@ -22,11 +26,9 @@ public class CsBuilder : IBuilder
         string args = $"publish {targetProject} {config.CompilerFlags} -o {outPath}".Trim();
         Log(Default, $"running \"{cmd} {args}\"\n");
         int result = CommandRunner.Run(cmd, args);
-        timer.Stop();
-        string elapsed = timer.Elapsed.TotalSeconds.ToString("0.0");
 
         if (result == 0)
-            Log(Done, $"build finished successfully in {elapsed}s. output located in {outPath}\n");
+            Log(Done, $"build finished successfully. output located in {outPath}\n");
         else
             Log(Err, $"project build failed. (exit code {result})\n");
     }

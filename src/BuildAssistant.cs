@@ -17,7 +17,6 @@ public static class BuildAssistant
         new RustBuilder(),
         //new GoBuilder(),
         //new JavaBuilder();
-        //new PythonBuilder()
     ];
 
     public static void Build()

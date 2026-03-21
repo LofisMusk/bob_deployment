@@ -31,4 +31,31 @@ public static class CommandRunner
             return -1;
         }
     }
+
+    public static int RunQuiet(string fileName, string arguments)
+    {
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = fileName,
+            Arguments = arguments,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true, 
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        try
+        {
+            using var process = Process.Start(startInfo);
+            
+            if (process == null) return -1;
+
+            process.WaitForExit();
+            return process.ExitCode;
+        }
+        catch (Exception)
+        {
+            return -1;
+        }
+    }
 }

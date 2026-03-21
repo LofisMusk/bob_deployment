@@ -1,6 +1,5 @@
 using static Logger;
 using static Logger.MessageType;
-using System.Diagnostics;
 
 public class RustBuilder : IBuilder
 {
@@ -10,9 +9,14 @@ public class RustBuilder : IBuilder
     public void Build(ProjectConfig config)
     {
         Log(Default, $"{Name} project detected\n");
-        Stopwatch timer = Stopwatch.StartNew();
+        if (CommandRunner.RunQuiet("cargo", "--version") != 0)
+        {
+            Log(Err, "cargo is not installed or not in PATH, unable to build\n");
+            return;
+        }
+        Log(Default, "cargo is present\n");
         string targetProject = config.MainFile;
-        string extension = Path.GetExtension(config.MainFile).ToLower();
+        string extension = Path.GetExtension(targetProject).ToLower();
         string cmd;
         string args;
         string outPath;
@@ -44,11 +48,9 @@ public class RustBuilder : IBuilder
 
         Log(Default, $"running \"{cmd} {args}\"\n");
         int result = CommandRunner.Run(cmd, args);
-        timer.Stop();
-        string elapsed = timer.Elapsed.TotalSeconds.ToString("0.0");
 
         if (result == 0)
-            Log(Done, $"build finished successfully in {elapsed}s. output located in {outPath}\n");
+            Log(Done, $"build finished successfully. output located in {outPath}\n");
         else
             Log(Err, $"project build failed. (exit code {result})\n");
     }
