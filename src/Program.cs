@@ -18,10 +18,10 @@ public class Program
             case "build":
                 BuildAssistant.Build();
                 break;
-            case "git-clone":
+            case "fetch":
                 Log(Default, "to do\n");
                 break;
-            case "make-json":
+            case "config":
                 JsonHandler.CreateTemplate();
                 break;
             case "info":
@@ -37,15 +37,15 @@ public class Program
     {
         Console.WriteLine("usage: bob [command]");
         Console.WriteLine("available commands:");
-        Console.WriteLine("build     : read bob-config.json and compile project to executable");
-        Console.WriteLine("git-clone : clone a repository and automatically build the project (if bobconfig.json exists)");
-        Console.WriteLine("make-json : create an empty bobconfig.json template");
-        Console.WriteLine("info      : display information about bob");
+        Console.WriteLine("build   : read bob-config.json and compile project to executable");
+        Console.WriteLine("fetch   : clone a repository and automatically build the project (if bobconfig.json exists)");
+        Console.WriteLine("config  : create an empty bobconfig.json template");
+        Console.WriteLine("info    : display information about bob");
     }
 
     private static void DisplayInfo()
     {
-        Console.WriteLine("bob (build orchestrator binary) version 0.1");
+        Console.WriteLine("bob (build orchestrator binary) version 0.1-alpha");
         Console.WriteLine("copyright (c) 2026 Michael Zenith");
         Console.WriteLine("licensed under GPL license");
     }
