@@ -1,5 +1,5 @@
 # bob (build orchestrator binary)
-bob is a minimalist build orchestrator inspired by the KISS philosophy of Arch Linux and the simplicity of makepkg. It streamlines the process of fetching source code, reading necessary data from bob-config.json and compiling the project into ready-to-use binaries without the need to remember 
+bob is a minimalist build orchestrator for Linux systems inspired by the KISS philosophy of Arch Linux and the simplicity of makepkg. It streamlines the process of fetching source code, reading necessary data from bob-config.json and compiling the project into ready-to-use binaries without the need to remember 
 complex compiler flags for every different language.
 ## Features
 * **Multi-language support:** native handling for compiled languages like C# and Rust
@@ -20,7 +20,7 @@ Example of a bob-config.json file for .NET project:
 ```
 Based on that bob will run `dotnet publish bob.csproj -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -v d -o dist`. Note that if you leave the OutputFile field empty, bob will automatically specify the default name for the built binary.
 
-**note:** bob is still in early development and many features are missing. At the moment bob is only available on Linux systems.
+**note:** bob is still in early development and many features are missing.
 ## Supported languages
 * **C#** (.NET)
 * **Rust** (Cargo)
@@ -28,7 +28,7 @@ Based on that bob will run `dotnet publish bob.csproj -c Release -r linux-x64 --
 * (planned) **Golang**
 * (planned) **Java**
 ## Setup
-To compile bob, run `dotnet publish bob.csproj -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true` (if on Windows then use `win-x64`). Then add the output binary to your system `PATH`. 
+To compile bob, run `dotnet publish bob.csproj -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true`. Then add the output binary to your system `PATH`. 
 ## Available commands
 * **bob build** - read bob-config.json and compile project to executable
 * **bob fetch** - clone a repository and automatically build the project (if bobconfig.json exists)
